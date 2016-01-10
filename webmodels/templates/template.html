@@ -10,17 +10,17 @@
     <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
 
     <!-- jQuery -->
-    <script src="{{ STATIC_URL }}jquery-1.10.2.js" type="text/javascript"></script>
-    <script src="{{ STATIC_URL }}jquery.autosize.min.js" type="text/javascript"></script>
+    <script src="{{ request.META.SCRIPT_NAME }}{{ STATIC_URL }}jquery-1.10.2.js" type="text/javascript"></script>
+    <script src="{{ request.META.SCRIPT_NAME }}{{ STATIC_URL }}jquery.autosize.min.js" type="text/javascript"></script>
 
     <!-- Bootstrap -->
     <!-- Latest compiled and minified CSS -->
-    <link rel="stylesheet" href="{{ STATIC_URL }}/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="{{ request.META.SCRIPT_NAME }}{{ STATIC_URL }}/bootstrap/css/bootstrap.min.css">
     <!-- Optional theme -->
-    <link rel="stylesheet" href="{{ STATIC_URL }}/bootstrap/css/bootstrap-theme.min.css">
+    <link rel="stylesheet" href="{{ request.META.SCRIPT_NAME }}{{ STATIC_URL }}/bootstrap/css/bootstrap-theme.min.css">
     <!-- <link rel="stylesheet" href="{{ STATIC_URL }}/web/bootstrap/css/bootstrap.spacelab.min.css"> -->
     <!-- Latest compiled and minified JavaScript -->
-    <script src="{{ STATIC_URL }}/bootstrap/js/bootstrap.min.js"></script>
+    <script src="{{ request.META.SCRIPT_NAME }}{{ STATIC_URL }}/bootstrap/js/bootstrap.min.js"></script>
 
     <!-- Our own -->
 
