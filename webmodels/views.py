@@ -1,6 +1,7 @@
 from django.http import HttpResponse
 from django.template.response import TemplateResponse
 from django.db.models import Avg, Min, Max, StdDev
+from django.db import connections, transaction
 
 from models import Models, Species, ObsFin, ObsCont
 
@@ -8,6 +9,28 @@ from matplotlib.backends.backend_agg import FigureCanvasAgg as FigureCanvas
 from matplotlib.figure import Figure
 
 #from utils import permission_required_or_403
+
+@transaction.commit_on_success
+def db_query(string, params=None, db='default', debug=False):
+    connection = connections[db]
+
+    cursor = connection.cursor()
+    result = None
+
+    if debug:
+        print cursor.mogrify(string, params)
+
+    try:
+        cursor.execute(string, params)
+        result = cursor.fetchall()
+    except:
+        import traceback
+        traceback.print_exc()
+        pass
+    finally:
+        cursor.close()
+
+    return result
 
 def index(request):
     context = {}
@@ -21,12 +44,17 @@ def models_list(request, sort='name'):
 
     if request.method == 'GET':
         sort = request.GET.get('sort', sort)
+        ion = request.GET.get('ion')
 
     if sort:
         models = models.order_by(sort)
 
+    if ion:
+        models = models.extra(where=["%s = any(ions)"], params=[ion])
+
     context['models'] = models
     context['sort'] = sort
+    context['ions'] = db_query("SELECT DISTINCT unnest(ions) as ion FROM models ORDER BY ion")
 
     return TemplateResponse(request, 'models_list.html', context=context)
 
@@ -35,9 +63,12 @@ def model_details(request, id=0):
 
     model = Models.objects.get(id=id)
     species = model.species_set.order_by('-rel_frac').filter(rel_frac__gt=0)
+    ions = model.ions
+    ions.sort()
 
     context['model'] = model
     context['species'] = species
+    context['ions'] = ions
 
     return TemplateResponse(request, 'model_details.html', context=context)
 

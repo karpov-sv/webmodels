@@ -10,9 +10,12 @@ Model {{ model.name }}
 
 {% block content %}
 
-  <a href="{% url 'model_plot_select' model.id %}" title="Click to adjust plot parameters">
-    <img src="{% url 'model_plot' model.id 'fin' %}" class="img-responsive center-block" alt="Responsive image">
-  </a>
+  <img src="{% url 'model_plot' model.id 'fin' %}" class="img-responsive center-block" alt="Responsive image">
+  <div class="pull-right">
+    <a href="{% url 'model_plot_select' model.id %}">
+      Adjust plot parameters
+    </a>
+  </div>
 
   <table class="table table-striped table-condensed">
     <tr>
@@ -36,6 +39,14 @@ Model {{ model.name }}
     <tr>
       <td>cl_par_1</td><td>{{ model.cl_par_1 }}</td>
       <td style="border-left: 1px solid lightgray">cl_par_2</td><td>{{ model.cl_par_2 }}</td>
+    </tr>
+    <tr>
+      <td>Ions in the model:</td>
+      <td colspan=3>
+        {% for ion in ions %}
+          <a href="{% url 'models_list' %}?ion={{ ion }}" title="Models with this ion">{{ ion }}</a>
+        {% endfor %}
+      </td>
     </tr>
   </table>
 
