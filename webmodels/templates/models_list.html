@@ -1,0 +1,65 @@
+{% extends "template.html" %}
+
+{% load endless %}
+
+{% block head %}
+  {% include "popup_image.html" %}
+{% endblock %}
+
+{% block ptitle %}CMFGEN Models{% endblock %}
+
+{% block title %}
+Available CMFGEN models
+{% endblock %}
+
+{% block content %}
+
+{% if False %}
+  {% paginate 50 models %}
+{% endif %}
+<table class="table table-striped table-condensed">
+  <tr>
+    <th>Name</th>
+    <th>Lstar</th>
+    <th>Mdot</th>
+    <th>Tstar</th>
+    <th>Teff</th>
+    <th>Velocity Law</th>
+    <th>cl_par_1</th>
+    <th>cl_par_2</th>
+    <th>Hydrogen <br>mass fraction</th>
+    <th>Hydrogen <br>fraction</th>
+    <th></th>
+  </tr>
+  {% for model in models %}
+    <tr>
+      <td><a href="{% url 'model_details' model.id %}"><span class="glyphicon glyphicon-picture"></span> {{ model.name }}</a></td>
+      <td>{{ model.lstar }}</td>
+      <td>{{ model.mdot }}</td>
+      <td>{{ model.tstar }}</td>
+      <td>{{ model.teff }}</td>
+      <td align="center">
+        {% if model.vel_law == 3 %}
+          Beta = {{ model.params.Beta1 }}
+        {% else %}
+          Beta1 = {{ model.params.Beta1 }}, Beta2 = {{ model.params.Beta2 }}
+        {% endif %}
+      </td>
+      <td>{{ model.cl_par_1 }}</td>
+      <td>{{ model.cl_par_2 }}</td>
+      <td>{{ model.hyd_mass_frac }}</td>
+      <td>{{ model.hyd_rel_frac }}</td>
+      <td>
+        <a href="{% url 'model_plot' model.id 'fin' %}" onclick="return popupImage(event, '{% url 'model_plot' model.id 'fin' %}', 'Spectrum for {{ model.name }}');" title="Show spectrum">S</a>
+
+        <a href="{% url 'model_plot' model.id 'cont' %}" onclick="return popupImage(event, '{% url 'model_plot' model.id 'cont' %}', 'Continuum for {{ model.name }}');" title="Show continuum">C</a>
+      </td>
+    </tr>
+  {% endfor %}
+</table>
+
+{% if False %}
+{% show_pages %}
+{% endif %}
+
+{% endblock %}

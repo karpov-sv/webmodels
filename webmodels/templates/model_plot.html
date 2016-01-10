@@ -1,0 +1,38 @@
+{% extends "template.html" %}
+
+{% load endless %}
+
+{% block ptitle %}{{ model.name }} : CMFGEN Models{% endblock %}
+
+{% block title %}
+Spectrum of model {{ model.name }}
+{% endblock %}
+
+{% block content %}
+
+<ul class="pager">
+  <li class="previous"><a href="{% url 'model_details' model.id %}"><span class="glyphicon glyphicon-backward"></span> Back to model</a></li>
+</ul>
+  <div class="text-center">
+    <form action="" method="post">
+      <!-- Parameter editor -->
+      <div class="form-inline">
+        <div class="form-group">
+          <label>Min:</label>
+          <input type="text" id="lmin" name="lmin" class="form-control" placeholder="Wavelength, Angstroms" value="{{ lmin|floatformat:2 }}">
+        </div>
+
+        <div class="form-group">
+          <label>Max:</label>
+          <input type="text" id="lmax" name="lmax" class="form-control" placeholder="Wavelength, Angstroms" value="{{ lmax|floatformat:2 }}">
+        </div>
+
+        <button type="submit" name="action" value="update" class="btn btn-default">Update spectrum</button
+
+    </form>
+
+  </div>
+
+  <img src="{% url 'model_plot_limits' model.id 'fin' lmin lmax %}" class="img-responsive center-block" alt="Spectrum">
+
+{% endblock %}

@@ -1,0 +1,70 @@
+{% extends "template.html" %}
+
+{% load endless %}
+
+{% block ptitle %}{{ model.name }} : CMFGEN Models{% endblock %}
+
+{% block title %}
+Model {{ model.name }}
+{% endblock %}
+
+{% block content %}
+
+  <a href="{% url 'model_plot_select' model.id %}" title="Click to adjust plot parameters">
+    <img src="{% url 'model_plot' model.id 'fin' %}" class="img-responsive center-block" alt="Responsive image">
+  </a>
+
+  <table class="table table-striped table-condensed">
+    <tr>
+      <td>Lstar</td><td>{{ model.lstar }}</td>
+      <td style="border-left: 1px solid lightgray">Mdot</td><td>{{ model.mdot }}</td>
+    </tr>
+
+    <tr>
+      <td>Tstar</td><td>{{ model.tstar }}</td>
+      <td style="border-left: 1px solid lightgray">Teff</td><td>{{ model.teff }}</td>
+    </tr>
+
+    <tr><td>Velocity Law</td><td colspan=3>
+      {% if model.vel_law == 3 %}
+        Beta Law with Beta = {{ model.params.Beta1 }}, Vinf = {{ model.params.Vinf1 }}
+      {% else %}
+        Double Beta Law with Beta1 = {{ model.params.Beta1 }}, Vinf1 = {{ model.params.Vinf1 }}, Beta2 = {{ model.params.Beta2 }}, Vinf2 = {{ model.params.Vinf2 }}
+      {% endif %}
+    </td></tr>
+
+    <tr>
+      <td>cl_par_1</td><td>{{ model.cl_par_1 }}</td>
+      <td style="border-left: 1px solid lightgray">cl_par_2</td><td>{{ model.cl_par_2 }}</td>
+    </tr>
+  </table>
+
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <h4 class="panel-title">
+        <a data-toggle="collapse" href="#species"><span class="glyphicon glyphicon-th-list"></span> Abundances of Species</a>
+      </h4>
+    </div>
+    <div id="species" class="panel-collapse collapse in">
+      <table class="table table-striped table-condensed">
+        <tr>
+          <th>Species</th>
+          <th>Mass fraction</th>
+          <th>Fraction</th>
+          <th>Z/Zsun</th>
+          <th>Zsun</th>
+        </tr>
+        {% for s in species %}
+          <tr>
+            <td>{{ s.name }}</td>
+            <td>{{ s.mass_frac }}</td>
+            <td>{{ s.rel_frac }}</td>
+            <td>{{ s.z_z_sun }}</td>
+            <td>{{ s.z_sun }}</td>
+          </tr>
+        {% endfor %}
+      </table>
+    </div>
+  </div>
+
+{% endblock %}
