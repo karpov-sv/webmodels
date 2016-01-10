@@ -50,7 +50,7 @@ def read_model(dir):
     model['dir'] = dir
     model['name'] = posixpath.split(dir)[-1]
 
-    if not posixpath.exists(posixpath.join(dir, 'MOD_SUM')) or not posixpath.exists(posixpath.join(dir, 'VADAT')) or not posixpath.exists(posixpath.join(dir, 'obs', 'obs_fin')) or not posixpath.exists(posixpath.join(dir, 'obs', 'obs_fin')):
+    if not posixpath.exists(posixpath.join(dir, 'MOD_SUM')) or not posixpath.exists(posixpath.join(dir, 'VADAT')) or not posixpath.exists(posixpath.join(dir, 'obs', 'obs_fin')) or not posixpath.exists(posixpath.join(dir, 'obs', 'obs_cont')):
         return None
 
     with open(posixpath.join(dir, 'MOD_SUM')) as ff:
