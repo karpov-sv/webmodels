@@ -14,12 +14,19 @@ def index(request):
 
     return TemplateResponse(request, 'index.html', context=context)
 
-def models_list(request):
+def models_list(request, sort='name'):
     context = {}
 
     models = Models.objects.all()
 
+    if request.method == 'GET':
+        sort = request.GET.get('sort', sort)
+
+    if sort:
+        models = models.order_by(sort)
+
     context['models'] = models
+    context['sort'] = sort
 
     return TemplateResponse(request, 'models_list.html', context=context)
 

@@ -1,6 +1,7 @@
 {% extends "template.html" %}
 
 {% load endless %}
+{% load filters %}
 
 {% block head %}
   {% include "popup_image.html" %}
@@ -14,21 +15,161 @@ Available CMFGEN models
 
 {% block content %}
 
-{% if False %}
-  {% paginate 50 models %}
-{% endif %}
+{% paginate 50 models %}
 <table class="table table-striped table-condensed">
   <tr>
-    <th>Name</th>
-    <th>Lstar</th>
-    <th>Mdot</th>
-    <th>Tstar</th>
-    <th>Teff</th>
-    <th>Velocity Law</th>
-    <th>cl_par_1</th>
-    <th>cl_par_2</th>
-    <th>Hydrogen <br>mass fraction</th>
-    <th>Hydrogen <br>fraction</th>
+    <th>Name
+      {% if sort == 'name' %}
+        <a href="?{{ request.GET | GET_remove:"sort" | GET_remove:"page" | GET_append:"sort=-name" | GET_urlencode }}"
+          <i class="fa fa-fw fa-sort-desc"></i>
+        </a>
+      {% elif sort == '-name'  %}
+        <a href="?{{ request.GET | GET_remove:"sort" | GET_remove:"page" | GET_append:"sort=name" | GET_urlencode }}"
+          <i class="fa fa-fw fa-sort-asc"></i>
+        </a>
+      {% else %}
+        <a href="?{{ request.GET | GET_remove:"sort" | GET_remove:"page" | GET_append:"sort=name" | GET_urlencode }}"
+          <i class="fa fa-fw fa-sort" style="color: lightgray"></i>
+        </a>
+      {% endif %}
+    </th>
+    <th>Lstar
+      {% if sort == 'lstar' %}
+        <a href="?{{ request.GET | GET_remove:"sort" | GET_remove:"page" | GET_append:"sort=-lstar" | GET_urlencode }}"
+          <i class="fa fa-fw fa-sort-desc"></i>
+        </a>
+      {% elif sort == '-lstar'  %}
+        <a href="?{{ request.GET | GET_remove:"sort" | GET_remove:"page" | GET_append:"sort=lstar" | GET_urlencode }}"
+          <i class="fa fa-fw fa-sort-asc"></i>
+        </a>
+      {% else %}
+        <a href="?{{ request.GET | GET_remove:"sort" | GET_remove:"page" | GET_append:"sort=lstar" | GET_urlencode }}"
+          <i class="fa fa-fw fa-sort" style="color: lightgray"></i>
+        </a>
+      {% endif %}
+    </th>
+    <th>Mdot
+      {% if sort == 'mdot' %}
+        <a href="?{{ request.GET | GET_remove:"sort" | GET_remove:"page" | GET_append:"sort=-mdot" | GET_urlencode }}"
+          <i class="fa fa-fw fa-sort-desc"></i>
+        </a>
+      {% elif sort == '-mdot'  %}
+        <a href="?{{ request.GET | GET_remove:"sort" | GET_remove:"page" | GET_append:"sort=mdot" | GET_urlencode }}"
+          <i class="fa fa-fw fa-sort-asc"></i>
+        </a>
+      {% else %}
+        <a href="?{{ request.GET | GET_remove:"sort" | GET_remove:"page" | GET_append:"sort=mdot" | GET_urlencode }}"
+          <i class="fa fa-fw fa-sort" style="color: lightgray"></i>
+        </a>
+      {% endif %}
+    </th>
+    <th>Tstar
+          {% if sort == 'tstar' %}
+        <a href="?{{ request.GET | GET_remove:"sort" | GET_remove:"page" | GET_append:"sort=-tstar" | GET_urlencode }}"
+          <i class="fa fa-fw fa-sort-desc"></i>
+        </a>
+      {% elif sort == '-tstar'  %}
+        <a href="?{{ request.GET | GET_remove:"sort" | GET_remove:"page" | GET_append:"sort=tstar" | GET_urlencode }}"
+          <i class="fa fa-fw fa-sort-asc"></i>
+        </a>
+      {% else %}
+        <a href="?{{ request.GET | GET_remove:"sort" | GET_remove:"page" | GET_append:"sort=tstar" | GET_urlencode }}"
+          <i class="fa fa-fw fa-sort" style="color: lightgray"></i>
+        </a>
+      {% endif %}
+    </th>
+    <th>Teff
+      {% if sort == 'teff' %}
+        <a href="?{{ request.GET | GET_remove:"sort" | GET_remove:"page" | GET_append:"sort=-teff" | GET_urlencode }}"
+          <i class="fa fa-fw fa-sort-desc"></i>
+        </a>
+      {% elif sort == '-teff'  %}
+        <a href="?{{ request.GET | GET_remove:"sort" | GET_remove:"page" | GET_append:"sort=teff" | GET_urlencode }}"
+          <i class="fa fa-fw fa-sort-asc"></i>
+        </a>
+      {% else %}
+        <a href="?{{ request.GET | GET_remove:"sort" | GET_remove:"page" | GET_append:"sort=teff" | GET_urlencode }}"
+          <i class="fa fa-fw fa-sort" style="color: lightgray"></i>
+        </a>
+      {% endif %}
+    </th>
+    <th>Velocity Law
+      {% if sort == 'vel_law' %}
+        <a href="?{{ request.GET | GET_remove:"sort" | GET_remove:"page" | GET_append:"sort=-vel_law" | GET_urlencode }}"
+          <i class="fa fa-fw fa-sort-desc"></i>
+        </a>
+      {% elif sort == '-vel_law'  %}
+        <a href="?{{ request.GET | GET_remove:"sort" | GET_remove:"page" | GET_append:"sort=vel_law" | GET_urlencode }}"
+          <i class="fa fa-fw fa-sort-asc"></i>
+        </a>
+      {% else %}
+        <a href="?{{ request.GET | GET_remove:"sort" | GET_remove:"page" | GET_append:"sort=vel_law" | GET_urlencode }}"
+          <i class="fa fa-fw fa-sort" style="color: lightgray"></i>
+        </a>
+      {% endif %}
+    </th>
+    <th>cl_par_1
+      {% if sort == 'cl_par_1' %}
+        <a href="?{{ request.GET | GET_remove:"sort" | GET_remove:"page" | GET_append:"sort=-cl_par_1" | GET_urlencode }}"
+          <i class="fa fa-fw fa-sort-desc"></i>
+        </a>
+      {% elif sort == '-cl_par_1'  %}
+        <a href="?{{ request.GET | GET_remove:"sort" | GET_remove:"page" | GET_append:"sort=cl_par_1" | GET_urlencode }}"
+          <i class="fa fa-fw fa-sort-asc"></i>
+        </a>
+      {% else %}
+        <a href="?{{ request.GET | GET_remove:"sort" | GET_remove:"page" | GET_append:"sort=cl_par_1" | GET_urlencode }}"
+          <i class="fa fa-fw fa-sort" style="color: lightgray"></i>
+        </a>
+      {% endif %}
+    </th>
+    <th>cl_par_2
+      {% if sort == 'cl_par_2' %}
+        <a href="?{{ request.GET | GET_remove:"sort" | GET_remove:"page" | GET_append:"sort=-cl_par_2" | GET_urlencode }}"
+          <i class="fa fa-fw fa-sort-desc"></i>
+        </a>
+      {% elif sort == '-cl_par_2'  %}
+        <a href="?{{ request.GET | GET_remove:"sort" | GET_remove:"page" | GET_append:"sort=cl_par_2" | GET_urlencode }}"
+          <i class="fa fa-fw fa-sort-asc"></i>
+        </a>
+      {% else %}
+        <a href="?{{ request.GET | GET_remove:"sort" | GET_remove:"page" | GET_append:"sort=cl_par_2" | GET_urlencode }}"
+          <i class="fa fa-fw fa-sort" style="color: lightgray"></i>
+        </a>
+      {% endif %}
+    </th>
+    <th>Hydrogen
+      {% if sort == 'hyd_mass_frac' %}
+        <a href="?{{ request.GET | GET_remove:"sort" | GET_remove:"page" | GET_append:"sort=-hyd_mass_frac" | GET_urlencode }}"
+          <i class="fa fa-fw fa-sort-desc"></i>
+        </a>
+      {% elif sort == '-hyd_mass_frac'  %}
+        <a href="?{{ request.GET | GET_remove:"sort" | GET_remove:"page" | GET_append:"sort=hyd_mass_frac" | GET_urlencode }}"
+          <i class="fa fa-fw fa-sort-asc"></i>
+        </a>
+      {% else %}
+        <a href="?{{ request.GET | GET_remove:"sort" | GET_remove:"page" | GET_append:"sort=hyd_mass_frac" | GET_urlencode }}"
+          <i class="fa fa-fw fa-sort" style="color: lightgray"></i>
+        </a>
+      {% endif %}
+      <br>mass fraction
+    </th>
+    <th>Hydrogen
+      {% if sort == 'hyd_rel_frac' %}
+        <a href="?{{ request.GET | GET_remove:"sort" | GET_remove:"page" | GET_append:"sort=-hyd_rel_frac" | GET_urlencode }}"
+          <i class="fa fa-fw fa-sort-desc"></i>
+        </a>
+      {% elif sort == '-hyd_rel_frac'  %}
+        <a href="?{{ request.GET | GET_remove:"sort" | GET_remove:"page" | GET_append:"sort=hyd_rel_frac" | GET_urlencode }}"
+          <i class="fa fa-fw fa-sort-asc"></i>
+        </a>
+      {% else %}
+        <a href="?{{ request.GET | GET_remove:"sort" | GET_remove:"page" | GET_append:"sort=hyd_rel_frac" | GET_urlencode }}"
+          <i class="fa fa-fw fa-sort" style="color: lightgray"></i>
+        </a>
+      {% endif %}
+      <br>fraction
+    </th>
     <th></th>
   </tr>
   {% for model in models %}
@@ -58,8 +199,6 @@ Available CMFGEN models
   {% endfor %}
 </table>
 
-{% if False %}
 {% show_pages %}
-{% endif %}
 
 {% endblock %}
