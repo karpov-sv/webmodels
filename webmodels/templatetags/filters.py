@@ -44,3 +44,12 @@ def markdown_file(filename):
         text = ff.read()
 
     return markdownify(text.decode('utf-8'))
+
+@register.filter
+def multiply(value, arg):
+    return float(value)*float(arg)
+
+@register.filter
+def my_float(value, ndigits=1):
+    format = '%.' + str(ndigits) + 'e'
+    return format % value

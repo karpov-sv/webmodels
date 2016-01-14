@@ -20,43 +20,35 @@ class Models(models.Model):
     tstar = models.FloatField(blank=True, null=True)
     teff = models.FloatField(blank=True, null=True)
     vel_law = models.IntegerField(blank=True, null=True)
+    vinf = models.IntegerField(blank=True, null=True)
     cl_par_1 = models.FloatField(blank=True, null=True)
     cl_par_2 = models.FloatField(blank=True, null=True)
     hyd_mass_frac = models.FloatField(blank=True, null=True)
     hyd_rel_frac = models.FloatField(blank=True, null=True)
+    carb_rel_frac = models.FloatField(blank=True, null=True)
+    nit_rel_frac = models.FloatField(blank=True, null=True)
+    oxy_rel_frac = models.FloatField(blank=True, null=True)
+    iron_rel_frac = models.FloatField(blank=True, null=True)
     ions = models.TextField(blank=True)  # This field type is a guess.
     params = DictionaryField()
     vadat = DictionaryField()
+    type = models.TextField(blank=True)
 
     class Meta:
         managed = False
         db_table = 'models'
 
-class ObsCont(models.Model):
+class Spectra(models.Model):
     id = models.IntegerField(primary_key=True)  # AutoField?
     model = models.ForeignKey(Models, db_column='model', blank=True, null=True)
-    freq = models.FloatField(blank=True, null=True)
     lamb = models.FloatField(db_column='lambda', blank=True, null=True)
-    fnu = models.FloatField(blank=True, null=True)
-    flambda = models.FloatField(blank=True, null=True)
+    flux = models.FloatField(blank=True, null=True)
+    cont = models.FloatField(blank=True, null=True)
+    fluxnorm = models.FloatField(blank=True, null=True)
 
     class Meta:
         managed = False
-        db_table = 'obs_cont'
-
-
-class ObsFin(models.Model):
-    id = models.IntegerField(primary_key=True)  # AutoField?
-    model = models.ForeignKey(Models, db_column='model', blank=True, null=True)
-    freq = models.FloatField(blank=True, null=True)
-    lamb = models.FloatField(db_column='lambda', blank=True, null=True)
-    fnu = models.FloatField(blank=True, null=True)
-    flambda = models.FloatField(blank=True, null=True)
-
-    class Meta:
-        managed = False
-        db_table = 'obs_fin'
-
+        db_table = 'spectra'
 
 class Species(models.Model):
     id = models.IntegerField(primary_key=True)  # AutoField?

@@ -1,6 +1,7 @@
 {% extends "template.html" %}
 
 {% load endless %}
+{% load filters %}
 
 {% block ptitle %}{{ model.name }} : CMFGEN Models{% endblock %}
 
@@ -10,12 +11,15 @@ Model {{ model.name }}
 
 {% block content %}
 
-  <img src="{% url 'model_plot' model.id 'fin' %}" class="img-responsive center-block" alt="Responsive image">
-  <div class="pull-right">
+  <img src="{% url 'model_plot' model.id 'flux' %}" class="img-responsive center-block" alt="Responsive image">
+
+  <div class="text-center">
     <a href="{% url 'model_plot_select' model.id %}">
-      Adjust plot parameters
+      <button type="button" class="btn btn-default">Adjust spectral range</button>
     </a>
   </div>
+
+  <div>
 
   <table class="table table-striped table-condensed">
     <tr>
@@ -50,6 +54,8 @@ Model {{ model.name }}
     </tr>
   </table>
 
+  </div>
+
   <div class="panel panel-default">
     <div class="panel-heading">
       <h4 class="panel-title">
@@ -60,18 +66,16 @@ Model {{ model.name }}
       <table class="table table-striped table-condensed">
         <tr>
           <th>Species</th>
-          <th>Mass fraction</th>
-          <th>Fraction</th>
-          <th>Z/Zsun</th>
-          <th>Zsun</th>
+          <th style="text-align:center">Relative Fraction</th>
+          <th style="text-align:center">Mass Fraction</th>
+          <th style="text-align:center">Z/Zsun</th>
         </tr>
         {% for s in species %}
           <tr>
             <td>{{ s.name }}</td>
-            <td>{{ s.mass_frac }}</td>
-            <td>{{ s.rel_frac }}</td>
-            <td>{{ s.z_z_sun }}</td>
-            <td>{{ s.z_sun }}</td>
+            <td align="center"><span title="Relative Fraction">{{ s.rel_frac }}</span></td>
+            <td align="center"><span title="Mass Fraction">{{ s.mass_frac|multiply:100 }}%</span></td>
+            <td align="center">{{ s.z_z_sun }}</td>
           </tr>
         {% endfor %}
       </table>

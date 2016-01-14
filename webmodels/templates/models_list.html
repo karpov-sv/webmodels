@@ -121,7 +121,22 @@
         </a>
       {% endif %}
     </th>
-    <th style="text-align:center">cl_par_1
+    <th style="text-align:center">Vinf
+      {% if sort == 'vinf' %}
+        <a href="?{{ request.GET | GET_remove:"sort" | GET_remove:"page" | GET_append:"sort=-vinf" | GET_urlencode }}"
+          <i class="fa fa-fw fa-sort-desc"></i>
+        </a>
+      {% elif sort == '-vinf'  %}
+        <a href="?{{ request.GET | GET_remove:"sort" | GET_remove:"page" | GET_append:"sort=vinf" | GET_urlencode }}"
+          <i class="fa fa-fw fa-sort-asc"></i>
+        </a>
+      {% else %}
+        <a href="?{{ request.GET | GET_remove:"sort" | GET_remove:"page" | GET_append:"sort=vinf" | GET_urlencode }}"
+          <i class="fa fa-fw fa-sort" style="color: lightgray"></i>
+        </a>
+      {% endif %}
+    </th>
+    <th style="text-align:center">CL_1
       {% if sort == 'cl_par_1' %}
         <a href="?{{ request.GET | GET_remove:"sort" | GET_remove:"page" | GET_append:"sort=-cl_par_1" | GET_urlencode }}"
           <i class="fa fa-fw fa-sort-desc"></i>
@@ -136,7 +151,7 @@
         </a>
       {% endif %}
     </th>
-    <th style="text-align:center">cl_par_2
+    <th style="text-align:center">CL_2
       {% if sort == 'cl_par_2' %}
         <a href="?{{ request.GET | GET_remove:"sort" | GET_remove:"page" | GET_append:"sort=-cl_par_2" | GET_urlencode }}"
           <i class="fa fa-fw fa-sort-desc"></i>
@@ -152,22 +167,6 @@
       {% endif %}
     </th>
     <th style="text-align:center">Hydrogen
-      {% if sort == 'hyd_mass_frac' %}
-        <a href="?{{ request.GET | GET_remove:"sort" | GET_remove:"page" | GET_append:"sort=-hyd_mass_frac" | GET_urlencode }}"
-          <i class="fa fa-fw fa-sort-desc"></i>
-        </a>
-      {% elif sort == '-hyd_mass_frac'  %}
-        <a href="?{{ request.GET | GET_remove:"sort" | GET_remove:"page" | GET_append:"sort=hyd_mass_frac" | GET_urlencode }}"
-          <i class="fa fa-fw fa-sort-asc"></i>
-        </a>
-      {% else %}
-        <a href="?{{ request.GET | GET_remove:"sort" | GET_remove:"page" | GET_append:"sort=hyd_mass_frac" | GET_urlencode }}"
-          <i class="fa fa-fw fa-sort" style="color: lightgray"></i>
-        </a>
-      {% endif %}
-      <br>mass fraction
-    </th>
-    <th style="text-align:center">Hydrogen
       {% if sort == 'hyd_rel_frac' %}
         <a href="?{{ request.GET | GET_remove:"sort" | GET_remove:"page" | GET_append:"sort=-hyd_rel_frac" | GET_urlencode }}"
           <i class="fa fa-fw fa-sort-desc"></i>
@@ -181,32 +180,106 @@
           <i class="fa fa-fw fa-sort" style="color: lightgray"></i>
         </a>
       {% endif %}
-      <br>fraction
     </th>
+    <th style="text-align:center">C
+      {% if sort == 'carb_rel_frac' %}
+        <a href="?{{ request.GET | GET_remove:"sort" | GET_remove:"page" | GET_append:"sort=-carb_rel_frac" | GET_urlencode }}"
+          <i class="fa fa-fw fa-sort-desc"></i>
+        </a>
+      {% elif sort == '-carb_rel_frac'  %}
+        <a href="?{{ request.GET | GET_remove:"sort" | GET_remove:"page" | GET_append:"sort=carb_rel_frac" | GET_urlencode }}"
+          <i class="fa fa-fw fa-sort-asc"></i>
+        </a>
+      {% else %}
+        <a href="?{{ request.GET | GET_remove:"sort" | GET_remove:"page" | GET_append:"sort=carb_rel_frac" | GET_urlencode }}"
+          <i class="fa fa-fw fa-sort" style="color: lightgray"></i>
+        </a>
+      {% endif %}
+    </th>
+    <th style="text-align:center">N
+      {% if sort == 'nit_rel_frac' %}
+        <a href="?{{ request.GET | GET_remove:"sort" | GET_remove:"page" | GET_append:"sort=-nit_rel_frac" | GET_urlencode }}"
+          <i class="fa fa-fw fa-sort-desc"></i>
+        </a>
+      {% elif sort == '-nit_rel_frac'  %}
+        <a href="?{{ request.GET | GET_remove:"sort" | GET_remove:"page" | GET_append:"sort=nit_rel_frac" | GET_urlencode }}"
+          <i class="fa fa-fw fa-sort-asc"></i>
+        </a>
+      {% else %}
+        <a href="?{{ request.GET | GET_remove:"sort" | GET_remove:"page" | GET_append:"sort=nit_rel_frac" | GET_urlencode }}"
+          <i class="fa fa-fw fa-sort" style="color: lightgray"></i>
+        </a>
+      {% endif %}
+    </th>
+    <th style="text-align:center">O
+      {% if sort == 'oxy_rel_frac' %}
+        <a href="?{{ request.GET | GET_remove:"sort" | GET_remove:"page" | GET_append:"sort=-oxy_rel_frac" | GET_urlencode }}"
+          <i class="fa fa-fw fa-sort-desc"></i>
+        </a>
+      {% elif sort == '-oxy_rel_frac'  %}
+        <a href="?{{ request.GET | GET_remove:"sort" | GET_remove:"page" | GET_append:"sort=oxy_rel_frac" | GET_urlencode }}"
+          <i class="fa fa-fw fa-sort-asc"></i>
+        </a>
+      {% else %}
+        <a href="?{{ request.GET | GET_remove:"sort" | GET_remove:"page" | GET_append:"sort=oxy_rel_frac" | GET_urlencode }}"
+          <i class="fa fa-fw fa-sort" style="color: lightgray"></i>
+        </a>
+      {% endif %}
+    </th>
+    <th style="text-align:center">Fe
+      {% if sort == 'iron_rel_frac' %}
+        <a href="?{{ request.GET | GET_remove:"sort" | GET_remove:"page" | GET_append:"sort=-iron_rel_frac" | GET_urlencode }}"
+          <i class="fa fa-fw fa-sort-desc"></i>
+        </a>
+      {% elif sort == '-iron_rel_frac'  %}
+        <a href="?{{ request.GET | GET_remove:"sort" | GET_remove:"page" | GET_append:"sort=iron_rel_frac" | GET_urlencode }}"
+          <i class="fa fa-fw fa-sort-asc"></i>
+        </a>
+      {% else %}
+        <a href="?{{ request.GET | GET_remove:"sort" | GET_remove:"page" | GET_append:"sort=iron_rel_frac" | GET_urlencode }}"
+          <i class="fa fa-fw fa-sort" style="color: lightgray"></i>
+        </a>
+      {% endif %}
+    </th>
+
     <th></th>
   </tr>
   {% for model in models %}
     <tr>
       <td><a href="{% url 'model_details' model.id %}"><span class="glyphicon glyphicon-picture"></span> {{ model.name }}</a></td>
-      <td align="center">{{ model.lstar }}</td>
+      <td align="center">{{ model.lstar | floatformat:0 }}</td>
       <td align="center">{{ model.mdot }}</td>
-      <td align="center">{{ model.tstar }}</td>
-      <td align="center">{{ model.teff }}</td>
+      <td align="center">{{ model.tstar | floatformat:0 }}</td>
+      <td align="center">{{ model.teff | floatformat:0 }}</td>
       <td align="center">
         {% if model.vel_law == 3 %}
-          Beta = {{ model.params.Beta1 }}
+          3: Beta = {{ model.params.Beta1 }}
+        {% elif model.vel_law == 7 %}
+          7: Beta = {{ model.params.Beta1 }}
         {% else %}
-          Beta1 = {{ model.params.Beta1 }}, Beta2 = {{ model.params.Beta2 }}
+          6: Beta1 = {{ model.params.Beta1 }}, Beta2 = {{ model.params.Beta2 }}
+        {% endif %}
+      </td>
+      <td align="center">
+        {% if model.vel_law == 3 %}
+          {{ model.vinf }}
+        {% elif model.vel_law == 7 %}
+          {{ model.vinf }}
+        {% else %}
+          Vinf1 = {{ model.params.Vinf1 }}, Vinf2 = {{ model.params.Vinf2 }}
         {% endif %}
       </td>
       <td align="center">{{ model.cl_par_1 }}</td>
       <td align="center">{{ model.cl_par_2 }}</td>
-      <td align="center">{{ model.hyd_mass_frac }}</td>
-      <td align="center">{{ model.hyd_rel_frac }}</td>
+      <td align="center"><span title="Relative fraction">{{ model.hyd_rel_frac }} /
+        <span title="Mass fraction">{{ model.hyd_mass_frac|multiply:100|floatformat:1 }}%</span></td>
+      <td align="center">{{ model.carb_rel_frac | my_float:1 }}</td>
+      <td align="center">{{ model.nit_rel_frac | my_float:1 }}</td>
+      <td align="center">{{ model.oxy_rel_frac | my_float:1 }}</td>
+      <td align="center">{{ model.iron_rel_frac | my_float:1 }}</td>
       <td>
-        <a href="{% url 'model_plot' model.id 'fin' %}" onclick="return popupImage(event, '{% url 'model_plot' model.id 'fin' %}', 'Spectrum for {{ model.name }}');" title="Show spectrum">S</a>
-
-        <a href="{% url 'model_plot' model.id 'cont' %}" onclick="return popupImage(event, '{% url 'model_plot' model.id 'cont' %}', 'Continuum for {{ model.name }}');" title="Show continuum">C</a>
+        <a href="{% url 'model_plot' model.id 'flux' %}" onclick="return popupImage(event, '{% url 'model_plot' model.id 'flux' %}', 'Spectrum for {{ model.name }}');" title="Show spectrum">S</a>
+        <a href="{% url 'model_plot' model.id 'fluxnorm' %}" onclick="return popupImage(event, '{% url 'model_plot' model.id 'fluxnorm' %}', 'Normalized spectrum for {{ model.name }}');" title="Show normalized spectrum">N</a>
       </td>
     </tr>
   {% endfor %}

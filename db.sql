@@ -9,16 +9,26 @@ CREATE TABLE models (
        Mdot FLOAT,
        Tstar FLOAT,
        Teff FLOAT,
+       logg FLOAT,
        vel_law INT,
+       Vinf FLOAT,
+
        cl_par_1 FLOAT,
        cl_par_2 FLOAT,
 
        hyd_mass_frac FLOAT,
        hyd_rel_frac FLOAT,
 
+       carb_rel_frac FLOAT,
+       nit_rel_frac FLOAT,
+       oxy_rel_frac FLOAT,
+       iron_rel_frac FLOAT,
+
        ions TEXT[],
        params hstore,
        vadat hstore,
+
+       type TEXT,
 
        maxcorr FLOAT
 );
@@ -36,28 +46,14 @@ CREATE TABLE species (
 CREATE INDEX ON species (model);
 CREATE INDEX ON species (name);
 
-DROP TABLE IF EXISTS obs_fin CASCADE;
-CREATE TABLE obs_fin (
+DROP TABLE IF EXISTS spectra CASCADE;
+CREATE TABLE spectra (
        id SERIAL PRIMARY KEY,
        model INT REFERENCES models (id) ON DELETE CASCADE,
-       freq FLOAT,
        lambda FLOAT,
-       fnu FLOAT,
-       flambda FLOAT
+       flux FLOAT,
+       cont FLOAT,
+       fluxnorm FLOAT
 );
-CREATE INDEX ON obs_fin (model);
-CREATE INDEX ON obs_fin (freq);
-CREATE INDEX ON obs_fin (lambda);
-
-DROP TABLE IF EXISTS obs_cont CASCADE;
-CREATE TABLE obs_cont (
-       id SERIAL PRIMARY KEY,
-       model INT REFERENCES models (id) ON DELETE CASCADE,
-       freq FLOAT,
-       lambda FLOAT,
-       fnu FLOAT,
-       flambda FLOAT
-);
-CREATE INDEX ON obs_cont (model);
-CREATE INDEX ON obs_cont (freq);
-CREATE INDEX ON obs_cont (lambda);
+CREATE INDEX ON spectra (model);
+CREATE INDEX ON spectra (lambda);

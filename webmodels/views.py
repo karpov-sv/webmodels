@@ -3,7 +3,7 @@ from django.template.response import TemplateResponse
 from django.db.models import Avg, Min, Max, StdDev
 from django.db import connections, transaction
 
-from models import Models, Species, ObsFin, ObsCont
+from models import Models, Species, Spectra
 
 from matplotlib.backends.backend_agg import FigureCanvasAgg as FigureCanvas
 from matplotlib.figure import Figure
@@ -72,7 +72,7 @@ def model_details(request, id=0):
 
     return TemplateResponse(request, 'model_details.html', context=context)
 
-def model_plot_select(request, lmin=3800, lmax=8000, id=0):
+def model_plot_select(request, lmin=3800, lmax=8000, mode='flux', id=0):
     context = {}
 
     model = Models.objects.get(id=id)
@@ -80,20 +80,20 @@ def model_plot_select(request, lmin=3800, lmax=8000, id=0):
     if request.method == 'POST':
         lmin = float(request.POST.get('lmin', 3800))
         lmax = float(request.POST.get('lmax', 8000))
+        mode = request.POST.get('mode', 'flux');
 
     context['model'] = model
     context['lmin'] = lmin
     context['lmax'] = lmax
+    context['mode'] = mode
 
     return TemplateResponse(request, 'model_plot.html', context=context)
 
-def model_plot(request, id=0, lmin=3800, lmax=8000, mode='fin', size=800):
+def model_plot(request, id=0, lmin=3800, lmax=8000, mode='flux', size=800):
+
     model = Models.objects.get(id=id)
 
-    if mode == 'fin':
-        data = model.obsfin_set.order_by('lamb')
-    else:
-        data = model.obscont_set.order_by('lamb')
+    data = model.spectra_set.order_by('lamb')
 
     if lmin:
         data = data.filter(lamb__gt=lmin)
@@ -101,24 +101,33 @@ def model_plot(request, id=0, lmin=3800, lmax=8000, mode='fin', size=800):
         data = data.filter(lamb__lt=lmax)
 
     lamb = [_.lamb for _ in data]
-    flamb = [_.flambda for _ in data]
+    flux = [_.flux for _ in data]
+    cont = [_.cont for _ in data]
+    fluxnorm = [_.fluxnorm for _ in data]
 
     fig = Figure(facecolor='white', figsize=(size/72, 400/72), tight_layout=True)
     ax = fig.add_subplot(111)
     ax.autoscale()
 
-    ax.plot(lamb, flamb, '-')
+    if mode == 'flux':
+        ax.plot(lamb, cont, '-', color='red')
+        ax.plot(lamb, flux, '-', color='blue')
+    elif mode == 'cont':
+        ax.plot(lamb, cont, '-', color='red')
+    elif mode == 'fluxnorm' or mode == 'norm':
+        ax.plot(lamb, fluxnorm, '-', color='blue')
 
-    ax.set_xlabel("Wavelength, Angstroms")
-    ax.set_ylabel("Specific Intensity")
+    ax.set_xlabel("Wavelength [ $\AA$ ]")
+
+    if  mode == 'fluxnorm' or mode == 'norm':
+        ax.set_ylabel("Normalized flux")
+    else:
+        ax.set_ylabel("Flux at 1 kpc [ erg/s/cm$^2$/$\AA$ ]")
 
     # 10% margins on both axes
     ax.margins(0.0, 0.1)
 
-    if mode == 'fin':
-        ax.set_title('%s' % model.name)
-    else:
-        ax.set_title('Continuum for %s' % model.name)
+    ax.set_title('%s: L/L$_{\odot}$ = %g' % (model.name, model.lstar))
 
     canvas = FigureCanvas(fig)
     response = HttpResponse(content_type='image/png')

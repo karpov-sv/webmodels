@@ -40,10 +40,17 @@ def read_obs(filename):
 
         freq,fnu = [np.array(_) for _ in freq,intens]
         freq *= 1e15
+        fnu *= 1e-23
         l = 1e8*29979245800/freq
         flambda = fnu*freq/l #  29979245800/(l*1e-8)**2/1e8
 
-        return {'freq':freq, 'fnu':intens, 'lambda':l, 'flambda':flambda}
+        l1 = np.array(range(900,10000,1) + range(10000, 40000, 10))
+        freq1 = np.interp(l1, l, freq)
+        intens1 = np.interp(l1, l, intens)
+        fnu1 = np.interp(l1, l, fnu)
+        flambda1 = np.interp(l1, l, flambda)
+
+        return {'freq':freq1, 'fnu':intens1, 'lambda':l1, 'flambda':flambda1}
 
 def read_model(dir):
     model = {'params':{}, 'ions':[], 'species':{}, 'vadat':{}}
@@ -80,6 +87,7 @@ def read_model(dir):
 
                 elif state == 4 or state == 5:
                     line = line.replace('R ', 'R*')
+                    line = line.replace('Log g', 'Log_g')
                     s = line.split()
                     for ss in s:
                         sss = ss.split('=')
@@ -101,6 +109,10 @@ def read_model(dir):
             m = re.match('^\s*(\S+)\s+\[(\S*)\]', line)
             if m:
                 model['vadat'][m.group(2)] = m.group(1)
+
+        if model['vadat']['CL_LAW'] != 'EXPO':
+            print "Incorrect CL_LAW = %s" % model['vadat']['CL_LAW']
+            return None
 
     model['obs_fin'] = read_obs(posixpath.join(dir, 'obs', 'obs_fin'))
     model['obs_cont'] = read_obs(posixpath.join(dir, 'obs', 'obs_cont'))
@@ -138,6 +150,7 @@ if __name__ == '__main__':
     parser = OptionParser()
     parser.add_option('-d', '--dbname', help='database name, defaults to webmodels', action='store', dest='dbname', default='webmodels')
     parser.add_option('-r', '--reprocess', help='Re-upload models already in database', action='store_true', dest='reprocess', default=False)
+    parser.add_option('-t', '--type', help='Star type, default to WR', action='store', dest='type', default='WR')
 
     (options, args) = parser.parse_args()
 
@@ -166,17 +179,21 @@ if __name__ == '__main__':
         params={k:str(model['params'][k]) for k in model['params'].keys()}
 
         query(conn, "DELETE FROM models WHERE name=%s", (model['name'],))
-        id = query(conn, "INSERT INTO models (name,meta,ions,params,vadat,Lstar,Mdot,Tstar,Teff,vel_law,cl_par_1,cl_par_2,hyd_mass_frac,hyd_rel_frac) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s) RETURNING id", (model['name'], model['time'], model['ions'], params,model['vadat'], model['params']['L*'], model['params']['Mdot'], model['params']['T*'], model['params']['Teff'], int(model['vadat']['VEL_LAW']), float(model['vadat']['CL_PAR_1']), float(model['vadat']['CL_PAR_2']), model['species']['HYD']['mass_frac'], model['species']['HYD']['rel_frac']))
+        id = query(conn, "INSERT INTO models (name,meta,ions,params,vadat,Lstar,Mdot,Tstar,Teff,vel_law,Vinf,cl_par_1,cl_par_2,hyd_mass_frac,hyd_rel_frac,type) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s) RETURNING id", (model['name'], model['time'], model['ions'], params,model['vadat'], model['params']['L*'], model['params']['Mdot'], model['params']['T*'], model['params']['Teff'], int(model['vadat']['VEL_LAW']), model['params']['Vinf1'], float(model['vadat']['CL_PAR_1']), float(model['vadat']['CL_PAR_2']), model['species']['HYD']['mass_frac'], model['species']['HYD']['rel_frac'], options.type))
+
+        query(conn, 'UPDATE models SET carb_rel_frac=%s, nit_rel_frac=%s, oxy_rel_frac=%s, iron_rel_frac=%s WHERE id=%s', (model['species']['CARB']['rel_frac'], model['species']['NIT']['rel_frac'], model['species']['OXY']['rel_frac'], model['species']['IRON']['rel_frac'], id))
+
+        if model['params'].has_key('Log_g'):
+            query(conn, 'UPDATE models SET logg=%s WHERE id=%s', (model['params']['Log_g'], id))
 
         for s in model['species'].keys():
             query(conn, "INSERT INTO species (model,name,mass_frac,rel_frac,z_z_sun,z_sun) VALUES (%s,%s,%s,%s,%s,%s)", (id, s, model['species'][s]['mass_frac'], model['species'][s]['rel_frac'], model['species'][s]['z_z_sun'], model['species'][s]['z_sun']))
 
-        for t in ['obs_fin', 'obs_cont']:
-            s = StringIO.StringIO()
-            s.writelines(["%d\t%g\t%g\t%g\t%g\n" % (id, model[t]['freq'][i], model[t]['lambda'][i], model[t]['fnu'][i], model[t]['flambda'][i]) for i in xrange(len(model[t]['freq']))])
-            s.seek(0)
-            cur = conn.cursor()
-            cur.copy_from(s, t, columns=('model','freq','lambda','fnu','flambda'))
-            conn.commit()
+        s = StringIO.StringIO()
+        s.writelines(["%d\t%g\t%g\t%g\t%g\n" % (id, model['obs_fin']['lambda'][i], model['obs_fin']['flambda'][i], model['obs_cont']['flambda'][i], model['obs_fin']['flambda'][i]/model['obs_cont']['flambda'][i]) for i in xrange(len(model['obs_fin']['lambda']))])
+        s.seek(0)
+        cur = conn.cursor()
+        cur.copy_from(s, 'spectra', columns=('model','lambda','flux','cont','fluxnorm'))
+        conn.commit()
 
         print "uploaded"
