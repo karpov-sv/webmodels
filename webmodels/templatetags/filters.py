@@ -1,5 +1,7 @@
 from django import template
 
+import markdown
+
 register = template.Library()
 
 @register.filter
@@ -29,3 +31,16 @@ def GET_append(value, key, new=1):
 @register.filter
 def GET_urlencode(value):
     return value.urlencode()
+
+@register.filter
+def markdownify(text):
+    # safe_mode governs how the function handles raw HTML
+    return markdown.markdown(text, safe_mode='escape')
+
+
+@register.simple_tag
+def markdown_file(filename):
+    with open(filename) as ff:
+        text = ff.read()
+
+    return markdownify(text.decode('utf-8'))

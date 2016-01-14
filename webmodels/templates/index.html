@@ -1,13 +1,14 @@
 {% extends "template.html" %}
 
+{% load filters %}
+
 {% block ptitle %}CMFGEN Models{% endblock %}
 
-{% block title %}
-Database of CMFGEN models
+{% block title-div %}
 {% endblock %}
 
 {% block content %}
 
-  Here goes some description
+  {% markdown_file 'webmodels/index.md' %}
 
 {% endblock %}
