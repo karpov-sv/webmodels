@@ -46,7 +46,7 @@
         </a>
       {% endif %}
     </th>
-    <th style="text-align:center">L*
+    <th style="text-align:center">L<sub>*</sub>
       {% if sort == 'lstar' %}
         <a href="?{{ request.GET | GET_remove:"sort" | GET_remove:"page" | GET_append:"sort=-lstar" | GET_urlencode }}"
           <i class="fa fa-fw fa-sort-desc"></i>
@@ -61,7 +61,7 @@
         </a>
       {% endif %}
     </th>
-    <th style="text-align:center">Mdot
+    <th style="text-align:center">M<sub>dot</sub>
       {% if sort == 'mdot' %}
         <a href="?{{ request.GET | GET_remove:"sort" | GET_remove:"page" | GET_append:"sort=-mdot" | GET_urlencode }}"
           <i class="fa fa-fw fa-sort-desc"></i>
@@ -76,7 +76,7 @@
         </a>
       {% endif %}
     </th>
-    <th style="text-align:center">T*
+    <th style="text-align:center">T<sub>*</sub>
           {% if sort == 'tstar' %}
         <a href="?{{ request.GET | GET_remove:"sort" | GET_remove:"page" | GET_append:"sort=-tstar" | GET_urlencode }}"
           <i class="fa fa-fw fa-sort-desc"></i>
@@ -91,7 +91,7 @@
         </a>
       {% endif %}
     </th>
-    <th style="text-align:center">Teff
+    <th style="text-align:center">T<sub>eff</sub>
       {% if sort == 'teff' %}
         <a href="?{{ request.GET | GET_remove:"sort" | GET_remove:"page" | GET_append:"sort=-teff" | GET_urlencode }}"
           <i class="fa fa-fw fa-sort-desc"></i>
@@ -121,7 +121,7 @@
         </a>
       {% endif %}
     </th>
-    <th style="text-align:center">Vinf
+    <th style="text-align:center">V<sub>&infin;</sub>
       {% if sort == 'vinf' %}
         <a href="?{{ request.GET | GET_remove:"sort" | GET_remove:"page" | GET_append:"sort=-vinf" | GET_urlencode }}"
           <i class="fa fa-fw fa-sort-desc"></i>
@@ -136,7 +136,7 @@
         </a>
       {% endif %}
     </th>
-    <th style="text-align:center">CL_1
+    <th style="text-align:center">CL<sub>1</sub>
       {% if sort == 'cl_par_1' %}
         <a href="?{{ request.GET | GET_remove:"sort" | GET_remove:"page" | GET_append:"sort=-cl_par_1" | GET_urlencode }}"
           <i class="fa fa-fw fa-sort-desc"></i>
@@ -151,7 +151,7 @@
         </a>
       {% endif %}
     </th>
-    <th style="text-align:center">CL_2
+    <th style="text-align:center">CL<sub>2</sub>
       {% if sort == 'cl_par_2' %}
         <a href="?{{ request.GET | GET_remove:"sort" | GET_remove:"page" | GET_append:"sort=-cl_par_2" | GET_urlencode }}"
           <i class="fa fa-fw fa-sort-desc"></i>
@@ -253,20 +253,20 @@
       <td align="center">{{ model.teff | floatformat:0 }}</td>
       <td align="center">
         {% if model.vel_law == 3 %}
-          3: Beta = {{ model.params.Beta1 }}
+          3: &beta; = {{ model.params.Beta1 }}
         {% elif model.vel_law == 7 %}
-          7: Beta = {{ model.params.Beta1 }}
+          7: &beta; = {{ model.params.Beta1 }}
         {% else %}
-          6: Beta1 = {{ model.params.Beta1 }}, Beta2 = {{ model.params.Beta2 }}
+          6: &beta;1 = {{ model.params.Beta1 }}, &beta;2 = {{ model.params.Beta2 }}
         {% endif %}
       </td>
       <td align="center">
         {% if model.vel_law == 3 %}
-          {{ model.vinf }}
+          {{ model.vinf | floatformat:0 }}
         {% elif model.vel_law == 7 %}
-          {{ model.vinf }}
+          {{ model.vinf | floatformat:0 }}
         {% else %}
-          Vinf1 = {{ model.params.Vinf1 }}, Vinf2 = {{ model.params.Vinf2 }}
+          V<sub>&infin;1</sub> = {{ model.params.Vinf1 | floatformat:0 }}, V<sub>&infin;2</sub> = {{ model.params.Vinf2 | floatformat:0 }}
         {% endif %}
       </td>
       <td align="center">{{ model.cl_par_1 }}</td>
