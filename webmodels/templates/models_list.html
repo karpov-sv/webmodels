@@ -49,7 +49,7 @@
         </a>
       {% endif %}
     </th>
-    <th style="text-align:center">L<sub>*</sub>
+    <th style="text-align:center">L<sub>*</sub> / L<sub>sun</sub>
       {% if sort == 'lstar' %}
         <a href="?{{ request.GET | GET_remove:"sort" | GET_remove:"page" | GET_append:"sort=-lstar" | GET_urlencode }}"
           <i class="fa fa-fw fa-sort-desc"></i>
@@ -109,6 +109,23 @@
         </a>
       {% endif %}
     </th>
+    {% if type == 'O' %}
+      <th style="text-align:center">Log g
+        {% if sort == 'logg' %}
+          <a href="?{{ request.GET | GET_remove:"sort" | GET_remove:"page" | GET_append:"sort=-logg" | GET_urlencode }}"
+            <i class="fa fa-fw fa-sort-desc"></i>
+          </a>
+        {% elif sort == '-logg'  %}
+          <a href="?{{ request.GET | GET_remove:"sort" | GET_remove:"page" | GET_append:"sort=logg" | GET_urlencode }}"
+            <i class="fa fa-fw fa-sort-asc"></i>
+          </a>
+        {% else %}
+          <a href="?{{ request.GET | GET_remove:"sort" | GET_remove:"page" | GET_append:"sort=logg" | GET_urlencode }}"
+            <i class="fa fa-fw fa-sort" style="color: lightgray"></i>
+          </a>
+        {% endif %}
+      </th>
+    {% endif %}
     <th style="text-align:center">Velocity Law
       {% if sort == 'vel_law' %}
         <a href="?{{ request.GET | GET_remove:"sort" | GET_remove:"page" | GET_append:"sort=-vel_law" | GET_urlencode }}"
@@ -254,6 +271,9 @@
       <td align="center">{{ model.mdot }}</td>
       <td align="center">{{ model.tstar | floatformat:0 }}</td>
       <td align="center">{{ model.teff | floatformat:0 }}</td>
+      {% if type == 'O' %}
+        <td align="center">{{ model.logg | floatformat:2 }}</td>
+      {% endif %}
       <td align="center">
         {% if model.vel_law == 3 %}
           3: &beta; = {{ model.params.Beta1 }}
