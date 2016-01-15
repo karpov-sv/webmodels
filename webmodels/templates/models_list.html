@@ -14,6 +14,9 @@
   {% if request.GET.ion %}
     with ion {{ request.GET.ion }}
   {% endif %}
+  {% if type and type != 'all' %}
+    for type {{ type }}
+  {% endif %}
   : {{ models.count }} models
 {% endblock %}
 
@@ -22,10 +25,10 @@
   <div class="small">
     Filter ions:
     {% for ion in ions %}
-      <a href="{% url 'models_list' %}?ion={{ ion.0 }}" title="Models with this ion">{{ ion.0 }}</a>
+      <a href="?ion={{ ion.0 }}" title="Models with this ion">{{ ion.0 }}</a>
       -
     {% endfor %}
-      <a href="{% url 'models_list' %}" title="All models">All</a>
+      <a href="?" title="All models">All</a>
   </div>
 
 {% paginate 50 models %}
@@ -257,7 +260,7 @@
         {% elif model.vel_law == 7 %}
           7: &beta; = {{ model.params.Beta1 }}
         {% else %}
-          6: &beta;1 = {{ model.params.Beta1 }}, &beta;2 = {{ model.params.Beta2 }}
+          6: &beta;<sub>1</sub> = {{ model.params.Beta1 }}, &beta;<sub>2</sub> = {{ model.params.Beta2 }}
         {% endif %}
       </td>
       <td align="center">
@@ -266,7 +269,7 @@
         {% elif model.vel_law == 7 %}
           {{ model.vinf | floatformat:0 }}
         {% else %}
-          V<sub>&infin;1</sub> = {{ model.params.Vinf1 | floatformat:0 }}, V<sub>&infin;2</sub> = {{ model.params.Vinf2 | floatformat:0 }}
+          V<sub>&infin;,1</sub> = {{ model.params.Vinf1 | floatformat:0 }}, V<sub>&infin;,2</sub> = {{ model.params.Vinf2 | floatformat:0 }}
         {% endif %}
       </td>
       <td align="center">{{ model.cl_par_1 }}</td>

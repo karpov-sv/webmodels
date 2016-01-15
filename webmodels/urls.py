@@ -11,6 +11,7 @@ urlpatterns = patterns('',
 
                        url(r'^models/?$', views.models_list, name="models_list"),
                        url(r'^models/(?P<id>\d+)/?$', views.model_details, name="model_details"),
+                       url(r'^models/(?P<type>\w+)/?$', views.models_list, name="models_list_type"),
 
                        url(r'^models/(?P<id>\d+)/plot/select/?$', views.model_plot_select, name="model_plot_select"),
                        url(r'^models/(?P<id>\d+)/plot/(?P<mode>\w+)?/?$', views.model_plot, {'size':800}, name="model_plot"),

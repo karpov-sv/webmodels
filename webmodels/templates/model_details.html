@@ -23,6 +23,14 @@ Model {{ model.name }}
 
   <table class="table table-striped table-condensed">
     <tr>
+      <td>Type:</td><td>{{ model.type }}</td>
+      {% if model.type == 'O' %}
+        <td style="border-left: 1px solid lightgray">Log g</td><td>{{ model.logg }}</td>
+      {% else %}
+        <td style="border-left: 1px solid lightgray"></td><td></td>
+      {% endif %}
+    </tr>
+    <tr>
       <td>Lstar</td><td>{{ model.lstar }}</td>
       <td style="border-left: 1px solid lightgray">Mdot</td><td>{{ model.mdot }}</td>
     </tr>
@@ -34,9 +42,11 @@ Model {{ model.name }}
 
     <tr><td>Velocity Law</td><td colspan=3>
       {% if model.vel_law == 3 %}
-        Beta Law with Beta = {{ model.params.Beta1 }}, Vinf = {{ model.params.Vinf1 }}
+        3: Beta Law with &beta; = {{ model.params.Beta1 }}, V<sub>&infin;</sub> = {{ model.params.Vinf1 }} km/s
+      {% elif model.vel_law == 7 %}
+        7: Beta Law with &beta; = {{ model.params.Beta1 }}, V<sub>&infin;</sub> = {{ model.params.Vinf1 }} km/s
       {% else %}
-        Double Beta Law with Beta1 = {{ model.params.Beta1 }}, Vinf1 = {{ model.params.Vinf1 }}, Beta2 = {{ model.params.Beta2 }}, Vinf2 = {{ model.params.Vinf2 }}
+        6: Double Beta Law with &beta;<sub>1</sub> = {{ model.params.Beta1 }}, V<sub>&infin;,1</sub> = {{ model.params.Vinf1 }} km/s, &beta;<sub>2</sub> = {{ model.params.Beta2 }}, V<sub>&infin;,2</sub> = {{ model.params.Vinf2 }} km/s
       {% endif %}
     </td></tr>
 

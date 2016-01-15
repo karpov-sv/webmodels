@@ -68,7 +68,9 @@
         <div class="collapse navbar-collapse navbar-ex1-collapse">
 
           <ul class="nav navbar-nav">
-            <li><a href="{% url 'models_list' %}">Models</a></li>
+            <li><a href="{% url 'models_list' %}">All models</a></li>
+            <li><a href="{% url 'models_list_type' 'WR' %}">WR models</a></li>
+            <li><a href="{% url 'models_list_type' 'O' %}">O models</a></li>
           </ul>
 
         </div>

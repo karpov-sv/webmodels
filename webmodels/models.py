@@ -19,6 +19,7 @@ class Models(models.Model):
     mdot = models.FloatField(blank=True, null=True)
     tstar = models.FloatField(blank=True, null=True)
     teff = models.FloatField(blank=True, null=True)
+    logg = models.FloatField(blank=True, null=True)
     vel_law = models.IntegerField(blank=True, null=True)
     vinf = models.IntegerField(blank=True, null=True)
     cl_par_1 = models.FloatField(blank=True, null=True)

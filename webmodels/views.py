@@ -37,10 +37,13 @@ def index(request):
 
     return TemplateResponse(request, 'index.html', context=context)
 
-def models_list(request, sort='name'):
+def models_list(request, sort='name', type=None):
     context = {}
 
     models = Models.objects.all()
+
+    if type and type != 'all':
+        models = models.filter(type=type)
 
     if request.method == 'GET':
         sort = request.GET.get('sort', sort)
@@ -54,6 +57,7 @@ def models_list(request, sort='name'):
 
     context['models'] = models
     context['sort'] = sort
+    context['type'] = type
     context['ions'] = db_query("SELECT DISTINCT unnest(ions) as ion FROM models ORDER BY ion")
 
     return TemplateResponse(request, 'models_list.html', context=context)
