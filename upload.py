@@ -60,6 +60,20 @@ def read_model(dir):
     if not posixpath.exists(posixpath.join(dir, 'MOD_SUM')) or not posixpath.exists(posixpath.join(dir, 'VADAT')) or not posixpath.exists(posixpath.join(dir, 'obs', 'obs_fin')) or not posixpath.exists(posixpath.join(dir, 'obs', 'obs_cont')):
         return None
 
+    with open(posixpath.join(dir, 'VADAT')) as ff:
+        lines = ff.readlines()
+
+        for line in lines:
+            if line[0] == '!':
+                continue
+            m = re.match('^\s*(\S+)\s+\[(\S*)\]', line)
+            if m:
+                model['vadat'][m.group(2)] = m.group(1)
+
+        if model['vadat']['CL_LAW'] != 'EXPO':
+            print "Incorrect CL_LAW = %s" % model['vadat']['CL_LAW']
+            return None
+
     with open(posixpath.join(dir, 'MOD_SUM')) as ff:
         lines = ff.readlines()
         state = 0
@@ -97,22 +111,8 @@ def read_model(dir):
                     if s[0] != 'SPECIES':
                         model['species'][s[0]] = {'rel_frac':my_float(s[1]), 'mass_frac':my_float(s[2]), 'z_z_sun':my_float(s[3]), 'z_sun':my_float(s[4])}
 
-                elif state == 9:
+                elif state == 9 or (state == 8 and model['vadat']['DO_CL'] == 'F'):
                     model['maxcorr'] = my_float(line.split(':')[1])
-
-    with open(posixpath.join(dir, 'VADAT')) as ff:
-        lines = ff.readlines()
-
-        for line in lines:
-            if line[0] == '!':
-                continue
-            m = re.match('^\s*(\S+)\s+\[(\S*)\]', line)
-            if m:
-                model['vadat'][m.group(2)] = m.group(1)
-
-        if model['vadat']['CL_LAW'] != 'EXPO':
-            print "Incorrect CL_LAW = %s" % model['vadat']['CL_LAW']
-            return None
 
     model['obs_fin'] = read_obs(posixpath.join(dir, 'obs', 'obs_fin'))
     model['obs_cont'] = read_obs(posixpath.join(dir, 'obs', 'obs_cont'))
