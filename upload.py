@@ -166,7 +166,7 @@ if __name__ == '__main__':
             print "Wrong model in dir %s" % dir
             continue
 
-        print model['dir'], model['params']['L*'], model['params']['Mdot'], model['params']['T*'], model['params']['Teff'], model['vadat']['VEL_LAW'], model['vadat']['CL_PAR_1'], model['vadat']['CL_PAR_2'], model['species']['HYD']['mass_frac'], model['species']['HYD']['rel_frac']
+        print model['name'], model['dir'], model['params']['L*'], model['params']['Mdot'], model['params']['T*'], model['params']['Teff'], model['vadat']['VEL_LAW'], model['vadat']['CL_PAR_1'], model['vadat']['CL_PAR_2'], model['species']['HYD']['mass_frac'], model['species']['HYD']['rel_frac']
 
         if model['maxcorr'] > 1e3:
             print "maxcorr=%g is too large" % model['maxcorr']
